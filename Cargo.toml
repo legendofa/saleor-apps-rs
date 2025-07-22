@@ -59,6 +59,7 @@ rand = "0.9.0"
 heureka-xml-feed = { path = "libs/heureka-xml-feed" }
 surrealdb = { version = "2.2.1", features = ["kv-rocksdb", "protocol-http"] }
 tinytemplate = { version = "1.2.1" }
+editorjs2html = "0.1.12"
 
 # Defines a size-optimized profile for the WASM bundle in release mode
 [profile.wasm-release]

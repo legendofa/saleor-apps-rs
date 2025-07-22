@@ -4,7 +4,7 @@ use heureka_xml_feed::{Delivery, DeliveryCourierId};
 use rust_decimal::Decimal;
 use serde::{Deserialize, Serialize};
 use surrealdb::RecordId;
-use tracing::{debug, info};
+use tracing::{debug, info, trace};
 
 use crate::server::event_handler::EventHandlerError;
 
@@ -154,24 +154,31 @@ fn method_into_delivery(
         })
         .and_then(|c| c.price.clone())
         .and_then(|c| rust_decimal::Decimal::from_f64_retain(c.amount))?;
-    debug!("Got price");
+    trace!("Got price");
 
-    debug!(
+    trace!(
         "{} < {} && {} < {}",
-        min.value, variant_weight.value, variant_weight.value, max.value
+        min.value,
+        variant_weight.value,
+        variant_weight.value,
+        max.value
+            .to_string()
+            .split_at_checked(5)
+            .unwrap_or((&max.value.to_string(), ""))
+            .0
     );
     let delivery_price = if min.value <= variant_weight.value && variant_weight.value <= max.value {
         price
     } else {
         return None;
     };
-    debug!("Variant within weight limits");
+    trace!("Variant within weight limits");
 
     let courier_id = method.metafield?;
-    debug!("courier_id: {} in metafield", &courier_id);
+    trace!("courier_id: {} in metafield", &courier_id);
 
     let delivery_id = DeliveryCourierId::from_str(&courier_id).ok()?;
-    debug!("got courier_id");
+    trace!("got courier_id");
 
     Some(Delivery {
         delivery_price_cod: match is_shipping_cod {
