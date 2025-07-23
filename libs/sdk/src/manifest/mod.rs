@@ -335,7 +335,7 @@ impl AppManifestBuilder {
                 about: Some(info.description),
                 author: Some(info.authors),
                 version: info.version,
-                app_url: config.app_api_base_url.clone(),
+                app_url: config.app_iframe_base_url.clone(),
                 configuration_url: Some(config.app_api_base_url.clone()),
                 token_target_url: format!("{}/api/register", config.app_api_base_url.clone()),
                 permissions: vec![],
